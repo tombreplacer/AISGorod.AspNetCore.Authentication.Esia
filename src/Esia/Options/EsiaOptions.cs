@@ -24,7 +24,12 @@ public class EsiaOptions : RemoteAuthenticationOptions, IEsiaOptions
     /// Фабрика подписей.
     /// </summary>
     internal Func<IServiceProvider, IEsiaSigner>? SignerFactory { get; private set; }
-    
+
+    /// <summary>
+    /// Кастомный валидатор jwt подписей.
+    /// </summary>
+    internal IEsiaTokenSignatureValidator TokenSignatureValidator { get; private set; }
+
     /// <summary>
     /// Конструктор по умолчанию.
     /// </summary>
@@ -84,7 +89,7 @@ public class EsiaOptions : RemoteAuthenticationOptions, IEsiaOptions
         SignerFactory = factory;
         signerConfigured = true;
     }
-    
+
     /// <inheritdoc />
     public void UseSigner<TSigner>(IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
         where TSigner : class, IEsiaSigner
@@ -99,5 +104,11 @@ public class EsiaOptions : RemoteAuthenticationOptions, IEsiaOptions
         // Устанавливаем фабрику для использования зарегистрированного сервиса
         SignerFactory = sp => sp.GetRequiredService<IEsiaSigner>();
         signerConfigured = true;
+    }
+
+    /// <inheritdoc />
+    public void UseTokenValidatior(IEsiaTokenSignatureValidator validator)
+    {
+        TokenSignatureValidator = validator;
     }
 }

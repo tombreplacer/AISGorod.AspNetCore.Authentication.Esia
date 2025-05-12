@@ -20,6 +20,15 @@ public class TestEsiaEnvironment : IEsiaEnvironment
         }
     }
 
+    /// <inheritdoc />
+    public string EsiaCertificateGOSTRaw
+    {
+        get
+        {
+            return EsiaCertificates.TestCertificateGOST;
+        }
+    }
+
     /// <summary>
     /// Базовый URL для запросов.
     /// </summary>

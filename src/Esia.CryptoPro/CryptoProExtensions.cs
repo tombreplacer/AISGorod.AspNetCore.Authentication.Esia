@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text;
 using AISGorod.AspNetCore.Authentication.Esia.CryptoPro.Options;
 using AISGorod.AspNetCore.Authentication.Esia.Options;
+using CryptoPro.Security.Cryptography.X509Certificates;
 
 namespace AISGorod.AspNetCore.Authentication.Esia.CryptoPro;
 
@@ -25,5 +27,18 @@ public static class CryptoProExtensions
             configure.Invoke(cpOptions);
             return new CryptoProEsiaSigner(cpOptions);
         });
+    }
+
+    /// <summary>
+    /// Добавление ГОСТ Р 34.10-2012 валидатора сигнатуры JWT.
+    /// </summary>
+    /// <remarks>
+    /// Необходимо использовать только один валидатор для подписи.
+    /// </remarks>
+    /// <param name="options">Настройки.</param>
+    public static void UseGostTokenValidator(this EsiaOptions options)
+    {
+        var certificate = new CpX509Certificate2(Encoding.UTF8.GetBytes(options.EnvironmentInstance!.EsiaCertificateGOSTRaw));
+        options.UseTokenValidatior(new JWSTokenSignatureValidatorGOST(certificate));
     }
 }

@@ -110,4 +110,10 @@ public interface IEsiaOptions
     /// <typeparam name="TSigner">Тип класса для подписи.</typeparam>
     public void UseSigner<TSigner>(IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
         where TSigner : class, IEsiaSigner;
+
+    /// <summary>
+    /// Использовать свой валидатор подписи токена.
+    /// </summary>
+    /// <param name="validator">Коллекция сервисов.</param>
+    public void UseTokenValidatior(IEsiaTokenSignatureValidator validator);
 }

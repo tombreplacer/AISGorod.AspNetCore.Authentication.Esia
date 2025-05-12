@@ -33,6 +33,8 @@ builder.Services
             bouncyCastleOptions.KeyFilePath = "/home/username/esia.key";
             bouncyCastleOptions.CertFilePath = "/home/username/esia.pem";
         });
+
+        options.UseGostTokenValidator();
     });
 
 builder.Services.AddMvc();

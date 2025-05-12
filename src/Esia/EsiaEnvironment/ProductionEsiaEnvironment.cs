@@ -20,6 +20,15 @@ public class ProductionEsiaEnvironment : IEsiaEnvironment
         }
     }
 
+    /// <inheritdoc/>
+    public string EsiaCertificateGOSTRaw
+    {
+        get
+        {
+            return EsiaCertificates.ProductionCertificateGOST;
+        }
+    }
+
     /// <summary>
     /// Базовый URL для запросов.
     /// </summary>
