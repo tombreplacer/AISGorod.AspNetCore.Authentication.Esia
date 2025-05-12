@@ -64,9 +64,22 @@ internal class OpenIdConnectOptionsBuilder(EsiaOptions esiaOptions, IEsiaEnviron
     /// <param name="options">Настройки openId.</param>
     private void ConfigureTokenValidation(OpenIdConnectOptions options)
     {
-        options.TokenValidationParameters.IssuerSigningKey =
-            new RsaSecurityKey(environment.EsiaCertificate.GetRSAPublicKey());
+        // options.TokenValidationParameters.IssuerSigningKey =
+        //     new RsaSecurityKey(environment.EsiaCertificate.GetRSAPublicKey());
         options.TokenValidationParameters.ValidIssuer = environment.Issuer;
+
+        if (esiaOptions.TokenSignatureValidator != null)
+        {
+            options.TokenValidationParameters.SignatureValidator = (token, tvp) =>
+            {
+                var securityToken = options.TokenHandler.ReadToken(token);
+                if (!esiaOptions.TokenSignatureValidator.Validate(token))
+                {
+                    throw new SecurityTokenValidationException("JWT Токен ЕСИА не валидный! Возможно кончился сертификат");
+                }
+                return securityToken;
+            };
+        }
     }
 
     /// <summary>
